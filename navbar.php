@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg fixed-top bg-cocoa border-bottom botder- gold dhadow-sm py-3">
     <div class= "container">
         <a class ="navbar-brand text-gold fw-bold tracking-wide" href="index.php">
-            ✨ DEV.PORTFOLIO
+            ✨ DEVELOP.STAR
         </a>
         <button class="navbar-toggler border-gold" type="button" data-bs-toggle="collapse" data-bs-target="#internshipNavbar" aria-controls="internshipNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon" style="filter: invert(72%) sepia(57%) saturate(415%) hue-rotate(10deg) brightness(93%) contrast(93%);"></span>

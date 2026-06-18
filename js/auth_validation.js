@@ -1,6 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     
+    const cursorParticles = [];
+    const particleColors = ['#d4af37', '#f0e6d2', '#aa8414']; 
+
+    window.addEventListener('mousemove', (e) => {
+        if (Math.random() < 0.25) { 
+            createParticle(e.clientX, e.clientY);
+        }
+    });
+
+    function createParticle(x, y) {
+        const particle = document.createElement('div');
+        const isStar = Math.random() > 0.5;
+
+        particle.style.position = 'fixed';
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+        particle.style.pointerEvents = 'none';
+        particle.style.zIndex = '99999';
+        particle.style.color = particleColors[Math.floor(Math.random() * particleColors.length)];
+        particle.style.fontSize = isStar ? `${Math.random() * 14 + 10}px` : `${Math.random() * 6 + 4}px`;
+        particle.style.fontFamily = 'serif';
+        particle.innerHTML = isStar ? '★' : '•';
+        particle.style.transition = 'transform 0.8s ease-out, opacity 0.8s ease-out';
+        particle.style.transform = 'translate(-50%, -50%) scale(1)';
+
+        document.body.appendChild(particle);
+
+        const velocityX = (Math.random() - 0.5) * 3;
+        const velocityY = (Math.random() - 0.5) * 3 + 1; 
+
+        let currentX = x;
+        let currentY = y;
+        let opacity = 1;
+        let scale = 1;
+
+        const animateLoop = setInterval(() => {
+            currentX += velocityX;
+            currentY += velocityY;
+            opacity -= 0.04;
+            scale -= 0.03;
+
+            if (opacity <= 0 || scale <= 0) {
+                clearInterval(animateLoop);
+                particle.remove();
+            } else {
+                particle.style.left = `${currentX}px`;
+                particle.style.top = `${currentY}px`;
+                particle.style.opacity = opacity;
+                particle.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            }
+        }, 30);
+    }
+
+    
     const toggleButtons = document.querySelectorAll('.togglePassword');
     toggleButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -18,32 +72,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    
     const usernameField = document.getElementById('regUsername');
     if (usernameField) {
         usernameField.addEventListener('blur', () => {
-            const usernameValue = usernameField.value.trim().toLowerCase();
+            const usernameValue = usernameField.value.trim();
             const alertBox = document.getElementById('usernameAjaxAlert');
             
             if (usernameValue === '') {
                 alertBox.textContent = '';
                 return;
             }
+            alertBox.style.color = '#d4af37'; // Gold
+            alertBox.textContent = '🔍 Querying database architecture via AJAX...';
 
-            alertBox.style.color = '#d4af37';
-            alertBox.textContent = '🔍 Scanning registry architecture asynchronously...';
-
-            // Simulating an asynchronous background Fetch operation targeting local state sets
-            setTimeout(() => {
-                const simulatedTakenRegistry = ['sathvika', 'admin', 'apexplanet', 'root'];
-                if (simulatedTakenRegistry.includes(usernameValue)) {
-                    alertBox.style.color = '#ff6b6b';
-                    alertBox.textContent = '❌ Anomaly: Username already occupied in core database schema.';
-                } else {
-                    alertBox.style.color = '#2ecc71';
-                    alertBox.textContent = '✅ Success: Username allocation space available.';
-                }
-            }, 800);
+            fetch(`check_user.php?username=${encodeURIComponent(usernameValue)}`)
+                .then(response => response.text())
+                .then(data => {
+                    if (data.trim() === "taken") {
+                        alertBox.style.color = '#ff6b6b'; // Light crimson alert
+                        alertBox.textContent = '❌ Anomaly: Username already occupied in core MySQL schema.';
+                    } else if (data.trim() === "available") {
+                        alertBox.style.color = '#2ecc71'; // Soft emerald success
+                        alertBox.textContent = '✅ Success: Username allocation space available.';
+                    } else {
+                        alertBox.style.color = '#ff6b6b';
+                        alertBox.textContent = '⚠️ Backend message reported: ' + data;
+                    }
+                })
+                .catch(error => {
+                    console.error('AJAX Fetch failure operation mapping:', error);
+                    alertBox.textContent = '⚠️ Failed to connect to server backend registry.';
+                });
         });
     }
 
@@ -90,7 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            alert('Authentication Success! Connecting pipeline nodes to backend.');
+            
+            alert('Authentication Success! Connecting pipeline nodes to database layer.');
         });
     }
 
@@ -114,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            alert('Success! Registration frontend parameters successfully parsed.');
+            alert('Success! Registration frontend parameters successfully verified.');
             registerForm.reset();
             if (matchAlertBox) matchAlertBox.textContent = '';
         });
