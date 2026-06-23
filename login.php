@@ -47,6 +47,6 @@
     <?php include('footer.php'); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/auth_validation.js"></script>
+    <script src="js/auth_validation.js?v=2.1"></script>
 </body>
 </html>

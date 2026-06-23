@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+            e.preventDefault(); 
             
             const userVal = document.getElementById('loginUser').value.trim();
             const passVal = document.getElementById('loginPassword').value.trim();
@@ -149,6 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Attention Required: All security verification handles must be populated.');
                 return;
             }
+
+            console.log(`[AJAX Dispatch]: Requesting verification for User: "${userVal}"`);
 
             fetch('verify_login.php', {
                 method: 'POST',
@@ -163,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.text())
             .then(statusText => {
                 const status = statusText.trim();
+                console.log(`[Database Server Response]: "${status}"`);
                 
                 if (status === "auth_success") {
                     alert('✨ Authentication Success! Verified successfully via local MySQL database. Access granted.');
