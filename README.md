@@ -9,6 +9,7 @@ This repository contains my submission for Task 2 of the ApexPlanet Full-Stack W
 - **Interactive UI Additions:** Features a specialized golden particle star trail cursor tracker responding dynamically to user mouse paths.
 
 ## Local Project Structure
+```bash
 ├── 📁 css/
 │   └── style.css            # Custom espresso brown & gold utility overrides
 ├── 📁 js/
@@ -19,3 +20,4 @@ This repository contains my submission for Task 2 of the ApexPlanet Full-Stack W
 ├── login.php                # Authentication page block
 ├── register.php             # New record signup container
 └── check_user.php           # Asynchronous PHP backend database lookup engine
+```
