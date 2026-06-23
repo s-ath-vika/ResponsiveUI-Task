@@ -136,21 +136,49 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmPassInput.addEventListener('input', executePasswordVerificationMatch);
     }
 
-    
+
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const user = document.getElementById('loginUser').value.trim();
-            const pass = document.getElementById('loginPassword').value.trim();
+            
+            const userVal = document.getElementById('loginUser').value.trim();
+            const passVal = document.getElementById('loginPassword').value.trim();
 
-            if (user === '' || pass === '') {
+            if (userVal === '' || passVal === '') {
                 alert('Attention Required: All security verification handles must be populated.');
                 return;
             }
 
-            
-            alert('Authentication Success! Connecting pipeline nodes to database layer.');
+            fetch('verify_login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'username': userVal,
+                    'password': passVal
+                })
+            })
+            .then(response => response.text())
+            .then(statusText => {
+                const status = statusText.trim();
+                
+                if (status === "auth_success") {
+                    alert('✨ Authentication Success! Verified successfully via local MySQL database. Access granted.');
+                    loginForm.reset();
+                } else if (status === "wrong_password") {
+                    alert('❌ Authentication Failure: Password discrepancy detected. Access denied.');
+                } else if (status === "user_not_found") {
+                    alert('❌ Authentication Failure: Account credential mapping not found within active database schema.');
+                } else {
+                    alert('⚠️ Backend anomaly reported: ' + status);
+                }
+            })
+            .catch(error => {
+                console.error('Login AJAX execution framework anomaly:', error);
+                alert('⚠️ Failed to communicate securely with authentication server backend.');
+            });
         });
     }
 
