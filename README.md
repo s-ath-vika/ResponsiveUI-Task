@@ -18,6 +18,7 @@ This repository contains my submission for Task 2 of the ApexPlanet Full-Stack W
 ├── footer.php               # Component footer layout
 ├── index.php                # System home presentation interface
 ├── login.php                # Authentication page block
-├── register.php             # New record signup container
+├── register.php 
+├── verify_login.php             # New record signup container
 └── check_user.php           # Asynchronous PHP backend database lookup engine
 ```
